@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'model/post.dart';
+import 'demo/listView_demo.dart';
+import 'demo/hello_demo.dart';
+import 'demo/drawer_demo.dart';
+import 'demo/BottomNav_demo.dart';
+
 
 void main() => runApp(APP());
 
@@ -11,9 +16,12 @@ class APP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Home(),
       theme: ThemeData(
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.purple,
+        highlightColor: Color.fromRGBO(255, 255, 255, 0.5),
+        splashColor: Colors.white70
       ),
 
     );
@@ -21,58 +29,64 @@ class APP extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
-Widget  _listItemBuilder (BuildContext context, int index) {
-  return Container(
-    color: Colors.white,
-    margin: EdgeInsets.all(8.0),
-    child: Column(
-      children: <Widget>[
-        Image.network(posts[index].imageUrl),
-        SizedBox(height: 16.0),
-        Text(
-          posts[index].title,
-          style: Theme.of(context).textTheme.title,
-          ),
-          Text(
-          posts[index].author,
-          style: Theme.of(context).textTheme.subhead,
-          ),
-          SizedBox(height: 16.0),
-      ],
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           title: Text('Kevin'),
+          actions: <Widget>[//actions小部件可以添加多个button
+            IconButton(
+              icon: Icon(Icons.search),
+              tooltip: 'Search',
+              onPressed: () => debugPrint('search button is seleced'),
+            ), 
+            // IconButton(
+            //   icon: Icon(Icons.scanner),
+            //   tooltip: 'Scanner',
+            //   onPressed: () => debugPrint('scanner button is seleced'),
+            // ), 
+          ],
           elevation: 0.0,//设置tabbar底部阴影值
+          bottom: TabBar(
+            unselectedLabelColor: Colors.black38,///设置未选择的颜色
+            indicatorColor:  Colors.black54,///设置标签的滑块的颜色
+            indicatorSize:  TabBarIndicatorSize.label,///设置顶部标签滑块的size
+            indicatorWeight: 1.0,///设置顶部滑块的宽度
+            tabs: <Widget>[
+              Tab(icon: Icon(Icons.local_florist)),
+              Tab(icon: Icon(Icons.local_gas_station)),
+              Tab(icon: Icon(Icons.local_activity)),
+            ],
+          ),
           
         ),
-        body: ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: _listItemBuilder,
+        body: TabBarView(
+          children: <Widget>[
+            ListViewDemo(),
+            // Icon(Icons.local_activity, size:128.0, color: Colors.black12),
+            Icon(Icons.donut_small, size:128.0, color: Colors.black12),
+            Icon(Icons.file_download, size:128.0, color: Colors.black12),
+          ],
         ),
-      );
-  }
-}
-
-class Hello extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Hello',
-        textDirection: TextDirection.ltr,
-        style: TextStyle(
-          fontSize: 40.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-        ),
+        drawer: DrawerDemo(),
+        bottomNavigationBar: BottomNavDemo(),
+        //  Container(
+        //   color: Colors.white,
+        //   padding: EdgeInsets.all(100.0),
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: <Widget>[
+        //       Text('This is drawer')
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
 }
+
+
